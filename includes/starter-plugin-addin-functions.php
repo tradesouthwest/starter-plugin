@@ -9,58 +9,25 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-/**
-	 * Get a setting from the settings API.
-	 *
-	 * @param mixed $option
-	 * @return string
-	 */
-function starter_plugin_get_option( $option_name, $default = '' ) {
-	// Array value
-	if ( strstr( $option_name, '[' ) ) {
 
-		parse_str( $option_name, $option_array );
-
-		// Option name is first key
-		$option_name = current( array_keys( $option_array ) );
-
-		// Get value
-		$option_values = get_option( $option_name, '' );
-
-		$key = key( $option_array[ $option_name ] );
-
-		if ( isset( $option_values[ $key ] ) ) {
-			$option_value = $option_values[ $key ];
-		}
-		else {
-			$option_value = null;
-		}
-
-	// Single value
-	} else {
-		$option_value = get_option( $option_name, null );
-	}
-
-	if ( is_array( $option_value ) ) {
-		$option_value = array_map( 'stripslashes', $option_value );
-	}
-	elseif ( ! is_null( $option_value ) ) {
-		$option_value = stripslashes( $option_value );
-	}
-
-      return $option_value === null ? $default : $option_value;
-}
+add_action( 'init', 'starter_plugin_addin_check_for_debug' );
 /**
  * Supported ob_end_flush() for all levels
  *
  * This replaces the WordPress `wp_ob_end_flush_all()` function
  * with a replacement that doesn't cause PHP notices.
  */
-// @TODO Conditional options boolean to start can be added here. @uses starter_plugin_get_option()
-remove_action( 'shutdown', 'wp_ob_end_flush_all', 1 );
-add_action( 'shutdown', function() {
-   while ( @ob_end_flush() );
-} );
+function starter_plugin_addin_check_for_debug(){
+
+    $values = get_option( 'starter-plugin-standard-fields' );
+    if ( is_array( $values ) && isset( $values[ 'checkbox' ] ) ) { 
+        remove_action( 'shutdown', 'wp_ob_end_flush_all', 1 );
+        add_action( 'shutdown', function() {
+            while ( @ob_end_flush() );
+            } 
+        );
+    }
+}
 
 if ( ! function_exists( 'starter_plugin_is_ajax' ) ) {
 
@@ -95,4 +62,4 @@ function starter_plugin_sanitize_taxonomy_name( $taxonomy ) {
 	$filtered = str_replace( array( ' ', '_' ), '-', $filtered ); // Replace spaces and underscores.
 
 	return apply_filters( 'sanitize_taxonomy_name', $filtered, $taxonomy );
-}
+} 
