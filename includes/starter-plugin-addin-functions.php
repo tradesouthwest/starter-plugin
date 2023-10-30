@@ -61,5 +61,5 @@ function starter_plugin_sanitize_taxonomy_name( $taxonomy ) {
 	$filtered = str_replace( array( '.', '\'', '"' ), '', $filtered ); // Kill quotes and full stops.
 	$filtered = str_replace( array( ' ', '_' ), '-', $filtered ); // Replace spaces and underscores.
 
-	return apply_filters( 'sanitize_taxonomy_name', $filtered, $taxonomy );
+	return apply_filters( 'starter_plugin_sanitize_taxonomy_name', $filtered, $taxonomy );
 } 
