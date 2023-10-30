@@ -103,7 +103,8 @@ final class Starter_Plugin {
 
 		// Register an example post type. To register other post types, duplicate this line.
 		$this->post_types['thing'] = new Starter_Plugin_Post_Type( 'thing', __( 'Thing', 'starter-plugin' ), __( 'Things', 'starter-plugin' ), 
-									  array( 'menu_icon' => 'dashicons-carrot' 
+									  array( 
+									    'menu_icon' => 'dashicons-carrot' 
 									) );
 		// Post Types - End
 		register_activation_hook( __FILE__, array( $this, 'install' ) );
