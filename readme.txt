@@ -1,5 +1,5 @@
 === Starter Plugin ===
-Contributors: mattyza, tradesouthwestgamilcom
+Contributors: mattyza, tradesouthwestgmailcom
 Donate link:
 Tags:
 Requires at least: 4.0.0
