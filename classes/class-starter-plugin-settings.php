@@ -259,7 +259,7 @@ final class Starter_Plugin_Settings {
 					'type'        => 'checkbox',
 					'default'     => '',
 					'section'     => 'standard-fields',
-					'description' => __( 'Place the field description text here.', 'starter-plugin' ),
+					'description' => __( 'In this example checkbox is used for debugging (removes send buffer of zlib output error).', 'starter-plugin' ),
 				);
 				$settings_fields['radio']    = array(
 					'name'        => __( 'Example Radio Buttons', 'starter-plugin' ),
