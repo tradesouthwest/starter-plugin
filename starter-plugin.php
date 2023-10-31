@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 require_once 'classes/class-starter-plugin.php';
-// For debugging - uncomment next line
-// require_once 'includes/starter-plugin-addin-functions.php';
+// For debugging - un/comment next line
+require_once 'includes/starter-plugin-addin-functions.php';
 /**
  * Returns the main instance of Starter_Plugin to prevent the need to use globals.
  *
