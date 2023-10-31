@@ -68,7 +68,12 @@ final class Starter_Plugin_Admin {
 	 * @return  void
 	 */
 	public function register_settings_screen () {
-		$this->hook = add_submenu_page( 'options-general.php', __( 'Starter Plugin Settings', 'starter-plugin' ), __( 'Starter Plugin', 'starter-plugin' ), 'manage_options', 'starter-plugin', array( $this, 'settings_screen' ) );
+		$this->hook = add_submenu_page( 'options-general.php', __( 'Starter Plugin Settings', 'starter-plugin' ), 
+					       __( 'Starter Plugin', 'starter-plugin' ), 
+					       'manage_options', 
+					       'starter-plugin', 
+					       array( $this, 'settings_screen' ) 
+					      );
 	}
 
 	/**
@@ -115,8 +120,12 @@ final class Starter_Plugin_Admin {
 		$sections = Starter_Plugin()->settings->get_settings_sections();
 		if ( 0 < count( $sections ) ) {
 			foreach ( $sections as $k => $v ) {
-				register_setting( 'starter-plugin-settings-' . sanitize_title_with_dashes( $k ), 'starter-plugin-' . $k, array( $this, 'validate_settings' ) );
-				add_settings_section( sanitize_title_with_dashes( $k ), $v, array( $this, 'render_settings' ), 'starter-plugin-' . $k, $k, $k );
+				register_setting( 'starter-plugin-settings-' . sanitize_title_with_dashes( $k ), 
+						 'starter-plugin-' . $k, 
+						 array( $this, 'validate_settings' ) 
+						);
+				add_settings_section( sanitize_title_with_dashes( $k ), $v, 
+						     array( $this, 'render_settings' ), 'starter-plugin-' . $k, $k, $k );
 			}
 		}
 	}
@@ -137,7 +146,8 @@ final class Starter_Plugin_Admin {
 				$args 		= $v;
 				$args['id'] = $k;
 
-				add_settings_field( $k, $v['name'], array( Starter_Plugin()->settings, 'render_field' ), 'starter-plugin-' . $token, $v['section'], $args );
+				add_settings_field( $k, $v['name'], array( Starter_Plugin()->settings, 'render_field' ), 
+						   'starter-plugin-' . $token, $v['section'], $args );
 			}
 		}
 	}
