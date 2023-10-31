@@ -40,6 +40,9 @@ final class Starter_Plugin_Admin {
 
 		// Register the settings screen within WordPress.
 		add_action( 'admin_menu', array( $this, 'register_settings_screen' ) );
+
+		// Register the settings screen within WordPress.
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 	}
 
 	/**
@@ -79,6 +82,7 @@ final class Starter_Plugin_Admin {
 		$sections = Starter_Plugin()->settings->get_settings_sections();
 		$tab      = $this->get_current_tab( $sections );
 		?>
+	<div id="starter-plugin-wrapper">
 		<div class="wrap starter-plugin-wrap">
 			<?php
 				$this->admin_header_html( $sections, $title );
@@ -91,6 +95,13 @@ final class Starter_Plugin_Admin {
 				?>
 			</form>
 		</div><!--/.wrap-->
+		<footer>
+			<?php 
+			$printver = Starter_Plugin()->token . ' ' . Starter_Plugin()->version;
+			?>
+			<p><?php echo $printver; ?></p>
+		</footer>
+	</div>
 		<?php
 	}
 
@@ -140,10 +151,28 @@ final class Starter_Plugin_Admin {
 	 */
 	public function validate_settings ( $input ) {
 		$sections = Starter_Plugin()->settings->get_settings_sections();
-		$tab      = $this->_get_current_tab( $sections );
+		$tab      = $this->get_current_tab( $sections );
 		return Starter_Plugin()->settings->validate_settings( $input, $tab );
 	}
 
+	/**
+	 * Register the settings within the Settings API.
+	 * @access  public
+	 * @since   1.0.0
+	 * @return  void
+	 */
+	public function enqueue_admin_scripts(){
+		$purl = plugins_url( '', __DIR__ );
+		$pver = Starter_Plugin()->version;
+		/*
+     * Enqueue styles */
+    wp_enqueue_style( 'starter-plugin-admin', 
+                        $purl . '/relatives/starter-plugin-admin.css', 
+                        array(), 
+						$pver, 
+						false 
+                        );
+	}
 	/**
 	 * Return marked up HTML for the header tag on the settings screen.
 	 * @access  public
