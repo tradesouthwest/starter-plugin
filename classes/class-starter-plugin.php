@@ -37,7 +37,7 @@ final class Starter_Plugin {
 	 * The plugin directory URL.
 	 * @var     string
 	 * @access  public
-	 * @since   1.0.0Abrahamyan
+	 * @since   1.0.0
 	 */
 	public $plugin_url;
 
@@ -103,11 +103,13 @@ final class Starter_Plugin {
 
 		// Register an example post type. To register other post types, duplicate this line.
 		$this->post_types['thing'] = new Starter_Plugin_Post_Type( 'thing', __( 'Thing', 'starter-plugin' ), __( 'Things', 'starter-plugin' ), 
-									  array( 
-									    'menu_icon' => 'dashicons-carrot' 
-									) );
+									  array( 'menu_icon' => 'dashicons-carrot' ) );
 		// Post Types - End
+
+		add_action( 'init', array( $this, 'flush_rewrite' ) );
+
 		register_activation_hook( __FILE__, array( $this, 'install' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'uninstall' ) );
 
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 	}
@@ -135,7 +137,8 @@ final class Starter_Plugin {
 	 * @since   1.0.0
 	 */
 	public function load_plugin_textdomain() {
-		load_plugin_textdomain( 'starter-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'starter-plugin', false, 
+		    dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**
@@ -153,6 +156,16 @@ final class Starter_Plugin {
 	public function __wakeup () {}
 
 	/**
+	 * Flush CPT. Runs on init.
+	 * @access  public
+	 * @since   1.0.0
+	 * @see https://andrezrv.com/2014/08/12/efficiently-flush-rewrite-rules-plugin-activation/
+	 */
+	public function flush_rewrite(){
+		flush_rewrite_rules();
+	}
+
+	/**
 	 * Installation. Runs on activation.
 	 * @access  public
 	 * @since   1.0.0
@@ -162,11 +175,23 @@ final class Starter_Plugin {
 	}
 
 	/**
+	 * Runs on deactivation.
+	 * @access  public
+	 * @since   1.0.0
+	 */
+	public function uninstall () {
+		delete_option( $this->token . '-version', $this->version );
+	}
+
+	/**
 	 * Log the plugin version number.
 	 * @access  private
 	 * @since   1.0.0
 	 */
 	private function log_version_number () {
+		if ( ! get_option( $this->token . '-version' ) ) {
+			add_option( $this->token . '-version', $this->version );
+		}
 		// Log the version number.
 		update_option( $this->token . '-version', $this->version );
 	}
